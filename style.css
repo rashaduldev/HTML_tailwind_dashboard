@@ -1,0 +1,44 @@
+Light mode .primary-text {
+  color: #001846;
+}
+.secondary-text {
+  color: #7b829d;
+}
+.primary_bg_color {
+  background-color: #9a4cca;
+}
+
+/* Dark mode using Tailwind-style class */
+.dark .primary-text {
+  color: #e0e7ff; /* light bluish for dark mode */
+}
+.dark .secondary-text {
+  color: #aeb3c8; /* light grayish for dark mode */
+}
+
+/* Sidebar background and text color */
+.custom-sidebar {
+  background-color: #ffffff;
+  color: #1f2937; /* Tailwind gray-800 */
+}
+.dark .custom-sidebar {
+  background-color: #111827; /* Tailwind gray-900 */
+  color: #e5e7eb; /* Tailwind gray-200 */
+}
+
+/* Muted text */
+.text-muted {
+  color: #6b7280;
+}
+.dark .text-muted {
+  color: #9ca3af;
+}
+
+.hover-logout:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+.active {
+  background-color: #9a4cca;
+  color: white !important;
+}

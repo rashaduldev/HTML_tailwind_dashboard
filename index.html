@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <!-- Head Section: Defines metadata, external resources, and custom styles for the UV Lab Dashboard, including TailwindCSS configuration and responsive design adjustments. -->
+  <head>
+    <!-- Meta Tags: Essential metadata for SEO, accessibility, and browser compatibility, enhancing the UV Lab Dashboard's visibility and performance. -->
+    <meta charset="UTF-8" />
+    <!-- Defines the character encoding as UTF-8 for universal text compatibility. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ensures responsive design by setting the viewport to device width with initial zoom level. -->
+    <meta
+      name="description"
+      content="UV Lab Dashboard for efficient project, task, and lead management with real-time analytics and customizable settings."
+    />
+    <!-- Provides a concise description of the dashboard for search engine snippets and user clarity. -->
+    <meta
+      name="keywords"
+      content="project management, task management, lead management, dashboard, analytics, UV Lab"
+    />
+    <!-- Lists relevant keywords to improve search engine indexing and discoverability. -->
+    <meta name="author" content="UV Lab" />
+    <!-- Specifies the author or organization responsible for the dashboard content. -->
+    <meta name="robots" content="index, follow" />
+    <!-- Instructs search engine crawlers to index the page and follow its links. -->
+    <meta property="og:title" content="UV Lab Dashboard" />
+    <!-- Sets the title for Open Graph protocol, used when sharing on social platforms. -->
+    <meta
+      property="og:description"
+      content="Manage projects, tasks, and leads with UV Lab's intuitive dashboard, featuring real-time analytics and user-friendly design."
+    />
+    <!-- Defines the Open Graph description for social media previews. -->
+    <meta property="og:type" content="website" />
+    <!-- Specifies the Open Graph content type as a website. -->
+    <meta property="og:url" content="https://www.uvlab.com/dashboard" />
+    <!-- Provides the canonical URL for the dashboard page in Open Graph data. -->
+    <meta
+      property="og:image"
+      content="https://www.uvlab.com/assets/preview.jpg"
+    />
+    <!-- Sets a preview image for social media sharing, enhancing visual appeal. -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Configures Twitter to use a large image card for shared links. -->
+    <meta name="twitter:title" content="UV Lab Dashboard" />
+    <!-- Defines the title for Twitter card previews. -->
+    <meta
+      name="twitter:description"
+      content="Streamline your workflow with UV Lab's dashboard for project and task management."
+    />
+    <!-- Sets the Twitter card description for concise sharing. -->
+    <meta
+      name="twitter:image"
+      content="https://www.uvlab.com/assets/preview.jpg"
+    />
+    <!-- Specifies the image for Twitter card previews. -->
+    <!-- End Meta Tags -->
+    <title>UV Lab Dashboard</title>
+
+    <!-- External Libraries: Includes TailwindCSS, Lucide icons, and Chart.js for styling and visualizations. -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- table script -->
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- jQuery (Required for DataTables) -->
+    <script src="./assets//js//datatable/jquery-3.7.1.js"></script>
+
+    <!-- DataTables core JS -->
+    <script src="./assets/js/datatable/dataTables.js"></script>
+
+    <!-- DataTables Tailwind CSS Integration -->
+    <script src="./assets//js/datatable/dataTables.tailwindcss.js"></script>
+
+    <!-- DataTables Tailwind CSS Styles (Optional but Recommended) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.3.2/css/dataTables.tailwindcss.css"
+    />
+
+    <!-- Fonts and Styles: Imports Inter font and custom stylesheet for consistent typography and design. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Tailwind Configuration: Customizes theme with dark mode, font family, and color palette for consistent branding. -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { inter: ["Inter", "sans-serif"] },
+            colors: {
+              primary: "#0F172A",
+              accent: "#1E40AF",
+              muted: "#94A3B8",
+              light: "#F8FAFC",
+              purpleMain: "#9A4CCA",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Custom Styles: Defines responsive design rules for mobile devices and hover effects for interactive elements. -->
+    <style>
+      @media (max-width: 768px) {
+        .md\:min-w-\[1440px\] {
+          min-width: 100%;
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
+        .md\:flex-row {
+          flex-direction: column;
+        }
+        .md\:w-1\/3,
+        .md\:w-2\/3 {
+          width: 100%;
+        }
+        .md\:flex-row.gap-4.p-4 {
+          flex-direction: column;
+        }
+        .md\:grid.md\:grid-cols-3 {
+          display: flex;
+          flex-direction: column;
+        }
+        .md\:col-span-2 {
+          width: 100%;
+        }
+        .flex.items-center.justify-center.h-\[220px\] {
+          flex-direction: column;
+          height: auto;
+          padding: 1rem;
+        }
+        .flex.items-center.justify-center.gap-10.w-full {
+          flex-direction: column;
+          gap: 1rem;
+          margin-left: 0;
+        }
+        .w-\[200px\].h-\[150px\] {
+          width: 150px;
+          height: 150px;
+        }
+        .overflow-x-auto {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        table {
+          min-width: 600px;
+        }
+        .p-4.flex.justify-between.items-center {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .flex.items-center.gap-4.relative {
+          flex-direction: column;
+          width: 100%;
+        }
+        .sm\:block {
+          display: block;
+          width: 100%;
+        }
+        .sm\:w-64 {
+          width: 100%;
+        }
+        .flex.items-center.gap-4 {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+      canvas {
+        max-width: 100%;
+        height: auto !important;
+      }
+      .hover-primary:hover {
+        background-color: #9a4cca;
+        color: white;
+      }
+      .sidebar-hidden {
+        display: none;
+      }
+      .main-full-width {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+    </style>
+    <!-- End Head Section -->
+  </head>
+
+  <!-- Body Section: Sets up the main layout with Inter font, background colors, and dark mode support for the dashboard. -->
+  <body
+    class="font-inter bg-gray-100 dark:bg-primary text-gray-900 dark:text-white mt-6"
+  >
+    <!-- Main Container: Defines the overall layout with a responsive flexbox structure, adapting to mobile and desktop views with a maximum width of 1440px. -->
+    <div class="md:min-w-[1440px] md:mx-10 flex md:flex-row mx-6 gap-6">
+      <!-- Sidebar Overlay: Provides a semi-transparent background for mobile sidebar visibility, activated when the sidebar is toggled. -->
+      <div
+        id="sidebarOverlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"
+      ></div>
+      <!-- End Sidebar Overlay -->
+
+      <!-- Sidebar: A responsive navigation panel with collapsible submenus, styled for both mobile (slide-in) and desktop (fixed) layouts, featuring icons and hover effects. -->
+      <aside
+        id="mobileSidebar"
+        class="custom-sidebar md:w-[280px] p-6 fixed top-0 left-0 h-screen overflow-y-auto md:overflow-visible bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 rounded-r-lg pb-20 sidebar-item"
+      >
+        <!-- Sidebar Logo: Displays the UV Lab logo at the top of the sidebar for branding. -->
+        <div class="flex items-center gap-3 mb-10">
+          <a href="./index.html"><img src="./assets/Logo.png" alt="Logo" /></a>
+        </div>
+        <!-- End Sidebar Logo -->
+
+        <!-- Sidebar Navigation: Contains navigation links and collapsible submenus for dashboard, project, task, support, lead, admin, and user management. -->
+        <nav class="space-y-2 text-sm font-medium">
+          <!-- Dashboard Link: Navigates to the main dashboard with a hover effect and icon. -->
+          <a
+            href="./admin/admin.html"
+            class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-primary transition"
+          >
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i
+            ><span>Dashboard</span>
+          </a>
+          <!-- End Dashboard Link -->
+
+          <!-- Project Management Link: Collapsible menu item for project management with a chevron for toggling. -->
+          <div
+            onclick="setActive(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="folder-kanban" class="w-5 h-5"></i
+              ><span>Project Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+          <!-- End Project Management Link -->
+
+          <!-- Task Management Link: Collapsible menu item for task management with a chevron for toggling. -->
+          <div
+            onclick="setActive(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="check-square" class="w-5 h-5"></i
+              ><span>Task Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+          <!-- End Task Management Link -->
+
+          <!-- Support Management Link: Collapsible menu item for support management with a chevron for toggling. -->
+          <div
+            onclick="setActive(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="life-buoy" class="w-5 h-5"></i
+              ><span>Support Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+          <!-- End Support Management Link -->
+
+          <!-- Lead Management Link: Navigates to lead management with a hover effect and icon. -->
+          <a
+            href="#"
+            class="flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-primary transition"
+          >
+            <i data-lucide="users" class="w-5 h-5"></i
+            ><span>Lead Management</span>
+          </a>
+          <!-- End Lead Management Link -->
+
+          <!-- Admin Control Link: Navigates to admin control with a hover effect and icon. -->
+          <a
+            href="#"
+            class="flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-primary transition"
+          >
+            <i data-lucide="settings" class="w-5 h-5"></i
+            ><span>Admin Control</span>
+          </a>
+          <!-- End Admin Control Link -->
+
+          <!-- User Management Link: Collapsible menu item for user management with a chevron for toggling. -->
+          <div
+            onclick="toggleSubmenu(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="user-cog" class="w-5 h-5"></i
+              ><span>User Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+          <!-- End User Management Link -->
+
+          <!-- User Management Submenu: Collapsible submenu with links for role & permission and all data, styled for smooth transitions. -->
+          <div
+            id="submenu"
+            class="ml-8 mt-2 hidden overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-0 space-y-1"
+          >
+            <a
+              href="#"
+              class="block text-muted hover-primary px-3 py-2 rounded-md"
+              >Role & Permission</a
+            >
+            <a
+              href="#"
+              class="block text-muted hover-primary px-3 py-2 rounded-md"
+              >All Data</a
+            >
+            <a
+              href="../exam/create-exam.html"
+              class="block text-sm text-muted hover-primary px-3 py-2 rounded-md"
+            >
+              Create Exam
+            </a>
+          </div>
+          <!-- End User Management Submenu -->
+
+          <!-- Logout Link: Navigates to logout with a hover effect and icon. -->
+          <a
+            href="#"
+            class="flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-logout transition"
+          >
+            <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+          </a>
+          <!-- End Logout Link -->
+        </nav>
+        <!-- End Sidebar Navigation -->
+      </aside>
+      <!-- End Sidebar -->
+
+      <!-- Main Content: A flexible container for the dashboard's core content, adapting to sidebar visibility and housing header, charts, and tables with responsive layouts. -->
+      <main class="flex-1 bg-gray-100 dark:bg-primary rounded-lg w-auto">
+        <!-- Header: Contains a sidebar toggle, search bar, language selector, notifications, theme toggle, and user profile with dropdowns, styled for both mobile and desktop. -->
+        <header
+          class="bg-white dark:bg-gray-900 p-2 sm:p-3 lg:p-4 flex items-center justify-between rounded-xl shadow-sm dark:shadow-gray-800 mb-6 transition-all duration-300"
+        >
+          <!-- Left Section: Contains the sidebar toggle button and search input for quick navigation and search functionality. -->
+          <div class="flex items-center gap-1 sm:gap-2">
+            <!-- Sidebar Toggle Button: Toggles the sidebar visibility on mobile devices with a smooth transition effect. -->
+            <button
+              id="toggleSidebar"
+              aria-label="Toggle sidebar"
+              class="p-1.5 sm:p-2 bg-[#001846] text-white rounded-lg hover:bg-[#002b66] focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-700 transition-colors duration-200"
+            >
+              <i data-lucide="menu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </button>
+            <!-- End Sidebar Toggle Button -->
+
+            <!-- Search Bar: Provides a text input for searching with a magnifying glass icon for accessibility. -->
+            <div class="relative">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search..."
+                class="w-32 sm:w-40 lg:w-48 px-2 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:ring-0 focus:ring-gray-300 dark:focus:ring-gray-600 focus:border-transparent transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
+              />
+              <button
+                id="searchToggle"
+                aria-label="Search"
+                class="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="m21 21-4.34-4.34" />
+                  <circle cx="11" cy="11" r="8" />
+                </svg>
+              </button>
+            </div>
+            <!-- End Search Bar -->
+          </div>
+          <!-- End Left Section -->
+
+          <!-- Right Section: Groups language selector, notifications, theme toggle, and user profile for quick access to user settings and actions. -->
+          <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
+            <!-- Language Selector: Dropdown for selecting languages with flag icons, displayed on hover with smooth transitions. -->
+            <div class="relative group">
+              <button
+                aria-label="Select language"
+                class="flex items-center gap-1 p-1 sm:p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              >
+                <img
+                  src="https://flagcdn.com/us.svg"
+                  class="w-4 h-2.5 sm:w-5 sm:h-3 rounded"
+                  alt="Current language flag"
+                />
+                <i
+                  data-lucide="chevron-down"
+                  class="w-3 h-3 text-gray-600 dark:text-gray-300"
+                ></i>
+              </button>
+              <div
+                class="absolute right-0 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg rounded-lg mt-0 p-1.5 w-24 sm:w-28 z-20 max-w-[80vw] border border-gray-100 dark:border-gray-700"
+              >
+                <ul class="space-y-1">
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <img
+                      src="https://flagcdn.com/gb.svg"
+                      class="w-4 h-2.5"
+                      alt="English flag"
+                    />
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >English</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <img
+                      src="https://flagcdn.com/fr.svg"
+                      class="w-4 h-2.5"
+                      alt="French flag"
+                    />
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Français</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <img
+                      src="https://flagcdn.com/bd.svg"
+                      class="w-4 h-2.5"
+                      alt="Bengali flag"
+                    />
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Bengali</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- End Language Selector -->
+
+            <!-- Notifications Button: Displays a bell icon with a badge indicating unread notifications. -->
+            <button
+              aria-label="Notifications"
+              class="relative p-1 sm:p-1.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <i
+                data-lucide="bell"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-300"
+              ></i>
+              <span
+                class="absolute -top-1 -right-1 w-4 h-4 text-xs font-semibold text-white bg-[#FB0A7D] rounded-full flex items-center justify-center"
+                >2</span
+              >
+            </button>
+            <!-- End Notifications Button -->
+
+            <!-- Theme Toggle Button: Switches between light and dark modes with a sun/moon icon. -->
+            <button
+              id="themeToggle"
+              aria-label="Toggle theme"
+              class="p-1 sm:p-1.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <i
+                data-lucide="sun"
+                id="themeIcon"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-300"
+              ></i>
+            </button>
+            <!-- End Theme Toggle Button -->
+
+            <!-- User Profile: Displays user avatar, name, and role with a dropdown for profile, settings, and logout options. -->
+            <div class="relative group">
+              <button
+                aria-label="User profile"
+                class="flex items-center gap-1 sm:gap-2 p-1 sm:p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              >
+                <img
+                  src="./assets/avatar.png"
+                  alt="User avatar"
+                  class="w-7 h-7 sm:w-8 sm:h-8 rounded-full"
+                />
+                <span
+                  class="absolute w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#00A897] rounded-full md:top-7 top-6 md:left-7 left-6 border border-white dark:border-gray-900"
+                ></span>
+                <div class="hidden lg:flex flex-col text-left">
+                  <span
+                    class="text-xs font-semibold text-gray-900 dark:text-gray-100"
+                    >Nasir Rahman</span
+                  >
+                  <span class="text-xs text-gray-500 dark:text-gray-400"
+                    >Super Admin</span
+                  >
+                </div>
+                <i
+                  data-lucide="chevron-down"
+                  class="hidden lg:block w-3 h-3 text-gray-600 dark:text-gray-300"
+                ></i>
+              </button>
+              <div
+                class="absolute right-0 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg rounded-lg mt-0 p-1.5 w-32 sm:w-36 z-20 max-w-[80vw] border border-gray-100 dark:border-gray-700"
+              >
+                <ul class="space-y-1">
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <i
+                      data-lucide="user"
+                      class="w-4 h-4 text-gray-600 dark:text-gray-300"
+                    ></i>
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Profile</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <i
+                      data-lucide="settings"
+                      class="w-4 h-4 text-gray-600 dark:text-gray-300"
+                    ></i>
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Settings</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <i
+                      data-lucide="log-out"
+                      class="w-4 h-4 text-gray-600 dark:text-gray-300"
+                    ></i>
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Logout</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- End User Profile -->
+          </div>
+          <!-- End Right Section -->
+        </header>
+        <!-- End Header -->
+
+        <!-- Dashboard Section: A container for project-related widgets, including progress cards, task summaries, charts, and a data table, styled for clarity and responsiveness. -->
+        <div class="bg-white dark:bg-gray-900 px-3 md:p-6 rounded-lg space-y-6">
+          <!-- Dashboard Title: Displays the main heading for the project dashboard with bold typography for emphasis. -->
+          <h2 class="text-[20px] primary-text font-bold mb-4">
+            Project Dashboard
+          </h2>
+          <!-- End Dashboard Title -->
+
+          <!-- Dashboard Cards Container: Groups project progress and task summary cards in a responsive flex layout. -->
+          <div class="flex flex-col md:flex-row gap-4">
+            <!-- Project Progress Card: Visualizes conversion rate with an icon and percentage, styled with a green accent for positive metrics. -->
+            <div
+              class="w-full md:w-1/3 border border-gray-300 rounded-lg dark:border-gray-700 min-h-[224px]"
+            >
+              <h3
+                class="text-[18px] font-medium p-4 border-b border-gray-300 dark:border-gray-700 primary-text dark:text-gray-100"
+              >
+                Project Progress
+              </h3>
+              <div class="p-4">
+                <div
+                  class="flex w-8 h-8 bg-[#28C76F] bg-opacity-10 rounded-full items-center justify-center mb-3"
+                >
+                  <span role="img" aria-label="New tasks">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect width="20" height="14" x="2" y="5" rx="2" />
+                      <line x1="2" x2="22" y1="10" y2="10" />
+                    </svg>
+                  </span>
+                </div>
+                <h4
+                  class="text-[24px] font-bold primary-text dark:text-gray-100"
+                >
+                  10.12%
+                </h4>
+                <p
+                  class="text-sm font-normal secondary-text dark:text-gray-400"
+                >
+                  Conversion Rate
+                </p>
+              </div>
+            </div>
+            <!-- End Project Progress Card -->
+
+            <!-- Task Summary Section: Displays three task status cards (New, In Progress, Completed) with icons and counts, arranged in a responsive grid. -->
+            <div
+              class="w-full md:w-2/3 border border-gray-300 rounded-lg dark:border-gray-700 min-h-[224px]"
+            >
+              <h3
+                class="text-[18px] font-medium p-4 border-b border-gray-300 dark:border-gray-700 primary-text dark:text-gray-100"
+              >
+                Task Summary
+              </h3>
+              <div class="flex flex-col md:flex-row gap-4 p-4">
+                <!-- New Tasks Card: Displays the count of new tasks with an orange-themed icon. -->
+                <div
+                  class="flex-1 border border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[136px]"
+                >
+                  <div
+                    class="w-8 h-8 bg-[#FFF8D6] dark:bg-opacity-10 rounded-full flex items-center justify-center mb-3"
+                  >
+                    <span role="img" aria-label="New tasks">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-[#E76500]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"
+                        />
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h4
+                    class="text-[24px] font-bold text-gray-900 dark:text-gray-100"
+                  >
+                    12.2k
+                  </h4>
+                  <p
+                    class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                  >
+                    New
+                  </p>
+                </div>
+                <!-- End New Tasks Card -->
+
+                <!-- In Progress Tasks Card: Displays the count of in-progress tasks with a green-themed icon. -->
+                <div
+                  class="flex-1 border border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[136px]"
+                >
+                  <div
+                    class="w-8 h-8 bg-[#DAFDF5] dark:bg-opacity-10 rounded-full flex items-center justify-center mb-3"
+                  >
+                    <span role="img" aria-label="New tasks">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-[#02414C] dark:text-green-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M8 2v4" />
+                        <path d="M16 2v4" />
+                        <rect width="18" height="18" x="3" y="4" rx="2" />
+                        <path d="M3 10h18" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h4
+                    class="text-[24px] font-bold text-gray-900 dark:text-gray-100"
+                  >
+                    32.2k
+                  </h4>
+                  <p
+                    class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                  >
+                    In Progress
+                  </p>
+                </div>
+                <!-- End In Progress Tasks Card -->
+
+                <!-- Completed Tasks Card: Displays the count of completed tasks with a green-themed icon. -->
+                <div
+                  class="flex-1 border border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[136px]"
+                >
+                  <div
+                    class="w-8 h-8 bg-[#DAFDF5] dark:bg-opacity-10 rounded-full flex items-center justify-center mb-3"
+                  >
+                    <span role="img" aria-label="New tasks">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-[#02414C] dark:text-green-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M8 2v4" />
+                        <path d="M16 2v4" />
+                        <rect width="18" height="18" x="3" y="4" rx="2" />
+                        <path d="M3 10h18" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h4
+                    class="text-[24px] font-bold text-gray-900 dark:text-gray-100"
+                  >
+                    22.22k
+                  </h4>
+                  <p
+                    class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                  >
+                    Completed
+                  </p>
+                </div>
+                <!-- End Completed Tasks Card -->
+              </div>
+            </div>
+            <!-- End Task Summary Section -->
+          </div>
+          <!-- End Dashboard Cards Container -->
+
+          <!-- Charts Container: Groups line and pie charts for earnings and assistance data visualization in a responsive grid layout. -->
+          <div>
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-4">
+              <!-- Line Chart: Displays earnings trends over selectable periods (12, 6, or 3 months) with a toggle for referrals-only data, styled for clarity and responsiveness. -->
+              <div
+                class="md:col-span-2 bg-white dark:bg-gray-900 rounded-lg border border-gray-300 dark:border-gray-700"
+              >
+                <div
+                  class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 border-b border-gray-300 dark:border-gray-700 px-4"
+                >
+                  <h2
+                    class="font-semibold text-base sm:text-lg text-gray-900 dark:text-gray-100 py-[22px]"
+                  >
+                    Earnings
+                  </h2>
+                  <div
+                    class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400"
+                  >
+                    <select
+                      id="chartTypeSelector"
+                      class="bg-transparent text-xs sm:text-sm focus:outline-none border border-gray-300 dark:border-gray-700 rounded px-2 py-1 sm:px-3 sm:py-1.5 text-gray-500 dark:text-gray-400"
+                    >
+                      <option value="line" selected>Line Chart</option>
+                      <option value="bar">Bar Chart</option>
+                    </select>
+                    <select
+                      class="bg-transparent text-xs sm:text-sm focus:outline-none border border-gray-300 dark:border-gray-700 rounded px-2 py-1 sm:px-3 sm:py-1.5 text-gray-500 dark:text-gray-400"
+                    >
+                      <option>12 months</option>
+                      <option>6 months</option>
+                      <option>3 months</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="pl-4 pr-4 pb-4 mt-10">
+                  <div
+                    class="chart-container"
+                    style="height: 420px; width: 100%"
+                  >
+                    <canvas id="lineChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <!-- End Line Chart -->
+
+              <!-- Pie Chart: Visualizes assistance category distribution (ERP, HRM, DMS, CRM, DAM) with color-coded segments and a legend, optimized for compact display. -->
+              <div
+                class="bg-white dark:bg-gray-900 rounded-lg border border-gray-300 dark:border-gray-700 h-[text-gray-400]"
+              >
+                <h2
+                  class="font-semibold border-b border-gray-300 dark:border-gray-700 pb-7 px-4 py-5"
+                >
+                  Assistance
+                </h2>
+                <div class="flex items-center justify-center h-[420px] p-4">
+                  <div
+                    class="flex items-center justify-center gap-10 w-full md:mt-20 -ml-8"
+                  >
+                    <div
+                      class="w-[200px] h-[150px] flex items-center justify-center"
+                    >
+                      <canvas id="pieChart" class="w-full h-full"></canvas>
+                    </div>
+                    <div
+                      class="flex md:flex-col justify-center gap-3 text-xs md:text-sm"
+                    >
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                        ERP
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-orange-500 rounded-full"></span>
+                        HRM
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                        DMS
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-purple-500 rounded-full"></span>
+                        CRM
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                        DAM
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Pie Chart -->
+            </div>
+          </div>
+          <!-- End Charts Container -->
+
+          <!-- Data Table: A responsive table displaying lead information with checkboxes, status selectors, and action buttons, styled for readability and interaction. -->
+          <h2 class="text-xl mt-6 font-bold">Normal customization table</h2>
+          <div
+            class="overflow-x-auto my-10 rounded-xl shadow border border-gray-200 dark:border-gray-700"
+          >
+            <table
+              class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm"
+            >
+              <!-- Table Header: Defines column headers for lead data with a checkbox for bulk selection. -->
+              <thead
+                class="bg-blue-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+              >
+                <tr>
+                  <th class="px-4 py-3 text-left">
+                    <input type="checkbox" />
+                  </th>
+                  <th class="px-4 py-3 text-left font-semibold">
+                    Name & Phone No.
+                  </th>
+                  <th class="px-4 py-3 text-left font-semibold">
+                    Interested Course
+                  </th>
+                  <th class="px-4 py-3 text-left font-semibold">Status</th>
+                  <th class="px-4 py-3 text-left font-semibold">Assigned</th>
+                  <th class="px-4 py-3 text-left font-semibold">Upload Date</th>
+                  <th class="px-4 py-3 text-left font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <!-- End Table Header -->
+
+              <!-- Table Body: Displays lead data rows with interactive elements like status dropdowns and action buttons. -->
+              <tbody
+                class="bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                <tr class="hover:bg-blue-50 dark:hover:bg-gray-800">
+                  <td class="px-4 py-3"><input type="checkbox" /></td>
+                  <td class="px-4 py-3">
+                    <div class="font-medium">Arafat Rahman</div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                      01912345679<br />arafat12@gmail.com
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    Graphics Design<br /><span class="text-xs text-gray-500"
+                      >Follow Up: 12/2/2025</span
+                    >
+                  </td>
+                  <td class="px-4 py-3">
+                    <select
+                      class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold"
+                    >
+                      <option>New</option>
+                      <option>In Progress</option>
+                      <option>Completed</option>
+                    </select>
+                  </td>
+                  <td class="px-4 py-3">Not Assigned</td>
+                  <td
+                    class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100"
+                  >
+                    01/01/25
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <!-- End Table Body -->
+            </table>
+          </div>
+          <!-- End Data Table -->
+          <!-- jquery data table started -->
+          <h2 class="text-xl mt-6 font-bold">
+            Jquery data table (fully functional)
+          </h2>
+          <div>
+            <table id="script_table" class="display">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Office</th>
+                  <th>Age</th>
+                  <th>Start date</th>
+                  <th>Salary</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>System Architect</td>
+                  <td>Edinburgh</td>
+                  <td>61</td>
+                  <td>2011-04-25</td>
+                  <td>$320,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rashadul Islam</td>
+                  <td>implementation</td>
+                  <td>Edinburgh</td>
+                  <td>25</td>
+                  <td>2025-04-25</td>
+                  <td>$120,800</td>
+                  <td>
+                    <div class="flex items-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-file-icon lucide-file"
+                        >
+                          <path
+                            d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                          />
+                          <path d="M14 2v4a2 2 0 0 0 2 2 h4" />
+                        </svg>
+                      </button>
+                      <button class="text-orange-500 hover:text-orange-700">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                      </button>
+                      <button class="text-red-600 hover:text-red-800">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <!-- <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Office</th>
+                  <th>Age</th>
+                  <th>Start date</th>
+                  <th>Salary</th>
+                  <th>action</th>
+                </tr>
+              </tfoot> -->
+            </table>
+          </div>
+          <!-- jquery data table ended -->
+        </div>
+        <!-- End Dashboard Section -->
+      </main>
+      <!-- End Main Content -->
+    </div>
+    <!-- End Main Container -->
+
+    <!-- External Script: Includes custom JavaScript for handling sidebar, submenu, and other interactive functionalities. -->
+    <script src="./assets/js/script.js"></script>
+    <script>
+      new DataTable("#script_table", {
+        perPage: 10,
+        perPageSelect: [10, 25, 50, 100],
+        sortable: true,
+        searchable: true,
+        labels: {
+          placeholder: "Search...",
+          perPage: "{select} entries per page",
+          noRows: "No data found",
+          info: "Showing {start} to {end} of {rows} entries",
+        },
+      });
+    </script>
+    <!-- End External Script -->
+  </body>
+  <!-- End Body Section -->
+</html>

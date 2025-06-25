@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRP Dashboard</title>
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { inter: ["Inter", "sans-serif"] },
+            colors: {
+              primary: "#0F172A",
+              accent: "#1E40AF",
+              muted: "#94A3B8",
+              light: "#F8FAFC",
+              purpleMain: "#9A4CCA",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Custom styles for mobile responsiveness */
+      @media (max-width: 768px) {
+        /* Main container adjustments */
+        .md\:min-w-\[1440px\] {
+          min-width: 100%;
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
+
+        /* Flex adjustments for mobile */
+        .md\:flex-row {
+          flex-direction: column;
+        }
+
+        /* Project Dashboard cards */
+        .md\:w-1\/3,
+        .md\:w-2\/3 {
+          width: 100%;
+        }
+
+        /* Task Summary cards */
+        .md\:flex-row.gap-4.p-4 {
+          flex-direction: column;
+        }
+
+        /* Charts grid */
+        .md\:grid.md\:grid-cols-3 {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .md\:col-span-2 {
+          width: 100%;
+        }
+
+        /* Pie chart container */
+        .flex.items-center.justify-center.h-\[220px\] {
+          flex-direction: column;
+          height: auto;
+          padding: 1rem;
+        }
+
+        .flex.items-center.justify-center.gap-10.w-full {
+          flex-direction: column;
+          gap: 1rem;
+          margin-left: 0;
+        }
+
+        .w-\[200px\].h-\[150px\] {
+          width: 150px;
+          height: 150px;
+        }
+
+        /* Table */
+        .overflow-x-auto {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+          min-width: 600px; /* Ensure table scrolls horizontally */
+        }
+
+        /* Header adjustments */
+        .p-4.flex.justify-between.items-center {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .flex.items-center.gap-4.relative {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .sm\:block {
+          display: block;
+          width: 100%;
+        }
+
+        .sm\:w-64 {
+          width: 100%;
+        }
+
+        /* Right side controls */
+        .flex.items-center.gap-4 {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+
+      /* Ensure charts are responsive */
+      canvas {
+        max-width: 100%;
+        height: auto !important;
+      }
+
+      /* Sidebar hover styles */
+      .hover-primary:hover {
+        background-color: #9a4cca;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body
+    class="font-inter bg-gray-100 dark:bg-primary text-gray-900 dark:text-white mt-6"
+  >
+    <div class="md:min-w-[1440px] mx-10 flex md:flex-row mx-6 gap-6">
+      <!-- Sidebar -->
+      <div
+        id="sidebarOverlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"
+      ></div>
+
+      <aside
+        id="mobileSidebar"
+        class="custom-sidebar w-[280px] p-6 fixed top-0 left-0 h-screen overflow-y-auto md:overflow-visible bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 md:block rounded-r-lg pb-20"
+      >
+        <div class="flex items-center gap-3 mb-10">
+          <a href="../index.html"
+            ><img src="../assets/Logo.png" alt="Logo"
+          /></a>
+        </div>
+
+        <nav class="space-y-2 text-sm font-medium">
+          <a
+            href="#"
+            class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-primary transition"
+          >
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i
+            ><span>Dashboard</span>
+          </a>
+
+          <div
+            onclick="setActive(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="folder-kanban" class="w-5 h-5"></i
+              ><span>Project Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+
+          <div
+            onclick="setActive(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="check-square" class="w-5 h-5"></i
+              ><span>Task Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+
+          <div
+            onclick="setActive(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="life-buoy" class="w-5 h-5"></i
+              ><span>Support Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+
+          <a
+            href="#"
+            class="flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-primary transition"
+          >
+            <i data-lucide="users" class="w-5 h-5"></i
+            ><span>Lead Management</span>
+          </a>
+
+          <a
+            href="#"
+            class="flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-primary transition"
+          >
+            <i data-lucide="settings" class="w-5 h-5"></i
+            ><span>Admin Control</span>
+          </a>
+
+          <div
+            onclick="toggleSubmenu(this)"
+            class="sidebar-item flex items-center justify-between px-4 py-3 rounded-md text-muted hover-primary cursor-pointer"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="user-cog" class="w-5 h-5"></i
+              ><span>User Management</span>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+
+          <div
+            id="submenu"
+            class="ml-8 mt-2 hidden overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-0 space-y-1"
+          >
+            <a
+              href="#"
+              class="block text-muted hover-primary px-3 py-2 rounded-md"
+              >Role & Permission</a
+            >
+            <a
+              href="#"
+              class="block text-muted hover-primary px-3 py-2 rounded-md"
+              >All Data</a
+            >
+            <a
+              href="../exam/create-exam.html"
+              class="block text-sm text-muted hover-primary px-3 py-2 rounded-md"
+            >
+              Create Exam
+            </a>
+          </div>
+
+          <a
+            href="#"
+            class="flex items-center gap-3 px-4 py-3 rounded-md text-muted hover-logout transition"
+          >
+            <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 bg-gray-100 dark:bg-primary rounded-lg w-auto">
+        <header
+          class="bg-white dark:bg-gray-900 p-2 sm:p-3 lg:p-4 flex items-center justify-between rounded-xl shadow-sm dark:shadow-gray-800 mb-6 transition-all duration-300"
+        >
+          <!-- Left Section: Sidebar Toggle and Search -->
+          <div class="flex items-center gap-1 sm:gap-2">
+            <!-- Sidebar Toggle -->
+            <button
+              id="toggleSidebar"
+              aria-label="Toggle sidebar"
+              class="p-1.5 sm:p-2 bg-[#001846] text-white rounded-lg hover:bg-[#002b66] focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-700 transition-colors duration-200"
+            >
+              <i data-lucide="menu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </button>
+            <!-- Search Bar -->
+            <div class="relative">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search..."
+                class="w-32 sm:w-40 lg:w-48 px-2 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 focus:border-transparent transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
+              />
+              <button
+                id="searchToggle"
+                aria-label="Search"
+                class="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="m21 21-4.34-4.34" />
+                  <circle cx="11" cy="11" r="8" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Section: Language, Notifications, Theme, User -->
+          <div class="flex items-center gap-1 sm:gap-2 lg:gap-3">
+            <!-- Language Selector -->
+            <div class="relative group">
+              <button
+                aria-label="Select language"
+                class="flex items-center gap-1 p-1 sm:p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              >
+                <img
+                  src="https://flagcdn.com/us.svg"
+                  class="w-4 h-2.5 sm:w-5 sm:h-3 rounded"
+                  alt="Current language flag"
+                />
+                <i
+                  data-lucide="chevron-down"
+                  class="w-3 h-3 text-gray-600 dark:text-gray-300"
+                ></i>
+              </button>
+              <div
+                class="absolute right-0 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg rounded-lg mt-0 p-1.5 w-24 sm:w-28 z-20 max-w-[80vw] border border-gray-100 dark:border-gray-700"
+              >
+                <ul class="space-y-1">
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <img
+                      src="https://flagcdn.com/gb.svg"
+                      class="w-4 h-2.5"
+                      alt="English flag"
+                    />
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >English</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <img
+                      src="https://flagcdn.com/fr.svg"
+                      class="w-4 h-2.5"
+                      alt="French flag"
+                    />
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Français</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <img
+                      src="https://flagcdn.com/bd.svg"
+                      class="w-4 h-2.5"
+                      alt="Bengali flag"
+                    />
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Bengali</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Notification Bell -->
+            <button
+              aria-label="Notifications"
+              class="relative p-1 sm:p-1.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <i
+                data-lucide="bell"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-300"
+              ></i>
+              <span
+                class="absolute -top-1 -right-1 w-4 h-4 text-xs font-semibold text-white bg-[#FB0A7D] rounded-full flex items-center justify-center"
+              >
+                2
+              </span>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button
+              id="themeToggle"
+              aria-label="Toggle theme"
+              class="p-1 sm:p-1.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <i
+                data-lucide="sun"
+                id="themeIcon"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-300"
+              ></i>
+            </button>
+
+            <!-- User Profile -->
+            <div class="relative group">
+              <button
+                aria-label="User profile"
+                class="flex items-center gap-1 sm:gap-2 p-1 sm:p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              >
+                <img
+                  src="../assets/avatar.png"
+                  alt="User avatar"
+                  class="w-7 h-7 sm:w-8 sm:h-8 rounded-full"
+                />
+                <span
+                  class="absolute w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#00A897] rounded-full md:top-7 top-6 md:left-7 left-6 border border-white dark:border-gray-900"
+                ></span>
+                <div class="hidden lg:flex flex-col text-left">
+                  <span
+                    class="text-xs font-semibold text-gray-900 dark:text-gray-100"
+                    >Nasir Rahman</span
+                  >
+                  <span class="text-xs text-gray-500 dark:text-gray-400"
+                    >Super Admin</span
+                  >
+                </div>
+                <i
+                  data-lucide="chevron-down"
+                  class="hidden lg:block w-3 h-3 text-gray-600 dark:text-gray-300"
+                ></i>
+              </button>
+              <div
+                class="absolute right-0 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg rounded-lg mt-0 p-1.5 w-32 sm:w-36 z-20 max-w-[80vw] border border-gray-100 dark:border-gray-700"
+              >
+                <ul class="space-y-1">
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <i
+                      data-lucide="user"
+                      class="w-4 h-4 text-gray-600 dark:text-gray-300"
+                    ></i>
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Profile</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <i
+                      data-lucide="settings"
+                      class="w-4 h-4 text-gray-600 dark:text-gray-300"
+                    ></i>
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Settings</span
+                    >
+                  </li>
+                  <li
+                    class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded transition-colors duration-200"
+                  >
+                    <i
+                      data-lucide="log-out"
+                      class="w-4 h-4 text-gray-600 dark:text-gray-300"
+                    ></i>
+                    <span class="text-xs text-gray-800 dark:text-gray-100"
+                      >Logout</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="bg-white dark:bg-gray-900 px-3 md:p-6 rounded-lg space-y-6">
+          <!-- Project Dashboard -->
+          <h2 class="text-[20px] primary-text font-bold mb-4">
+            Project Dashboard
+          </h2>
+          <div class="flex flex-col md:flex-row gap-4">
+            <!-- Left Section -->
+            <div
+              class="w-full md:w-1/3 border border-gray-300 rounded-lg dark:border-gray-700 min-h-[224px]"
+            >
+              <h3
+                class="text-[18px] font-medium p-4 border-b border-gray-300 dark:border-gray-700 primary-text dark:text-gray-100"
+              >
+                Project Progress
+              </h3>
+              <div class="p-4">
+                <div
+                  class="flex w-8 h-8 bg-[#28C76F] bg-opacity-10 rounded-full items-center justify-center mb-3"
+                >
+                  <span role="img" aria-label="New tasks">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect width="20" height="14" x="2" y="5" rx="2" />
+                      <line x1="2" x2="22" y1="10" y2="10" />
+                    </svg>
+                  </span>
+                </div>
+                <h4
+                  class="text-[24px] font-bold primary-text dark:text-gray-100"
+                >
+                  10.12%
+                </h4>
+                <p
+                  class="text-sm font-normal secondary-text dark:text-gray-400"
+                >
+                  Conversion Rate
+                </p>
+              </div>
+            </div>
+            <!-- Right Section -->
+            <div
+              class="w-full md:w-2/3 border border-gray-300 rounded-lg dark:border-gray-700 min-h-[224px]"
+            >
+              <h3
+                class="text-[18px] font-medium p-4 border-b border-gray-300 dark:border-gray-700 primary-text dark:text-gray-100"
+              >
+                Task Summary
+              </h3>
+              <div class="flex flex-col md:flex-row gap-4 p-4">
+                <!-- Card 1 -->
+                <div
+                  class="flex-1 border border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[136px]"
+                >
+                  <div
+                    class="w-8 h-8 bg-[#FFF8D6] dark:bg-opacity-10 rounded-full flex items-center justify-center mb-3"
+                  >
+                    <span role="img" aria-label="New tasks">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-[#E76500]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"
+                        />
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h4
+                    class="text-[24px] font-bold text-gray-900 dark:text-gray-100"
+                  >
+                    12.2k
+                  </h4>
+                  <p
+                    class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                  >
+                    New
+                  </p>
+                </div>
+                <!-- Card 2 -->
+                <div
+                  class="flex-1 border border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[136px]"
+                >
+                  <div
+                    class="w-8 h-8 bg-[#DAFDF5] dark:bg-opacity-10 rounded-full flex items-center justify-center mb-3"
+                  >
+                    <span role="img" aria-label="New tasks">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-[#02414C] dark:text-green-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M8 2v4" />
+                        <path d="M16 2v4" />
+                        <rect width="18" height="18" x="3" y="4" rx="2" />
+                        <path d="M3 10h18" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h4
+                    class="text-[24px] font-bold text-gray-900 dark:text-gray-100"
+                  >
+                    32.2k
+                  </h4>
+                  <p
+                    class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                  >
+                    In Progress
+                  </p>
+                </div>
+                <!-- Card 3 -->
+                <div
+                  class="flex-1 border border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[136px]"
+                >
+                  <div
+                    class="w-8 h-8 bg-[#DAFDF5] dark:bg-opacity-10 rounded-full flex items-center justify-center mb-3"
+                  >
+                    <span role="img" aria-label="New tasks">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-[#02414C] dark:text-green-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M8 2v4" />
+                        <path d="M16 2v4" />
+                        <rect width="18" height="18" x="3" y="4" rx="2" />
+                        <path d="M3 10h18" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h4
+                    class="text-[24px] font-bold text-gray-900 dark:text-gray-100"
+                  >
+                    22.22k
+                  </h4>
+                  <p
+                    class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                  >
+                    Completed
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100"
+          >
+            <!-- Support Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div
+                class="border border-gray-200 dark:border-gray-700 rounded-xl"
+              >
+                <h2
+                  class="text-[18px] p-4 font-medium border-b border-gray-300 dark:border-gray-700 primary-text dark:text-gray-100"
+                >
+                  Support Summary
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 mt-10">
+                  <!-- New -->
+                  <div
+                    class="flex flex-col border items-start border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[120px]"
+                  >
+                    <div
+                      class="mb-2 text-orange-400 flex items-center justify-center bg-orange-100 dark:bg-orange-200/10 rounded-full w-8 h-8 p-2"
+                    >
+                      <i data-lucide="pie-chart" class="w-6 h-6"></i>
+                    </div>
+                    <div class="text-xl font-bold text-center">12.2k</div>
+                    <div
+                      class="text-sm text-gray-500 dark:text-gray-400 text-center"
+                    >
+                      New
+                    </div>
+                  </div>
+
+                  <!-- InProgress -->
+                  <div
+                    class="flex flex-col border items-start border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[120px]"
+                  >
+                    <div
+                      class="mb-2 text-green-400 flex items-center justify-center bg-green-100 dark:bg-green-200/10 rounded-full w-8 h-8 p-2"
+                    >
+                      <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                    <div
+                      class="text-xl font-bold text-blue-900 dark:text-white text-center"
+                    >
+                      32.2k
+                    </div>
+                    <div
+                      class="text-sm text-gray-500 dark:text-gray-400 text-center"
+                    >
+                      InProgress
+                    </div>
+                  </div>
+
+                  <!-- Completed -->
+                  <div
+                    class="flex flex-col border items-start border-gray-300 dark:border-gray-700 rounded-lg p-4 min-h-[120px]"
+                  >
+                    <div
+                      class="mb-2 text-green-400 flex items-center justify-center bg-green-100 dark:bg-green-200/10 rounded-full w-8 h-8 p-2"
+                    >
+                      <i data-lucide="calendar-check" class="w-6 h-6"></i>
+                    </div>
+                    <div
+                      class="text-xl font-bold text-blue-900 dark:text-white text-center"
+                    >
+                      22.2k
+                    </div>
+                    <div
+                      class="text-sm text-gray-500 dark:text-gray-400 text-center"
+                    >
+                      Completed
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Task Overdue -->
+              <div
+                class="border border-gray-200 dark:border-gray-700 rounded-xl"
+              >
+                <div
+                  class="flex items-center justify-between mb-4 text-[18px] font-medium p-4 border-b border-gray-300 dark:border-gray-700 primary-text dark:text-gray-100"
+                >
+                  <h2 class="text-lg font-semibold">Task Overdue</h2>
+                  <a
+                    href="#"
+                    class="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    See All <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </a>
+                </div>
+
+                <div class="p-4 space-y-4">
+                  <!-- Task Item -->
+                  <div class="bg-red-100/40 dark:bg-red-100/5 p-4 rounded-lg">
+                    <h3
+                      class="font-semibold text-sm text-gray-900 dark:text-white"
+                    >
+                      ui/ux design UY Dashboard Product
+                    </h3>
+                    <div
+                      class="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1 gap-2"
+                    >
+                      <img
+                        src="https://i.pravatar.cc/24?u=1"
+                        alt="avatar"
+                        class="w-5 h-5 rounded-full"
+                      />
+                      Abul Hasan
+                      <i data-lucide="calendar-days" class="w-4 h-4 ml-2"></i>
+                      Deadline: 12/5/2025
+                    </div>
+                  </div>
+
+                  <!-- Repeat Task Item -->
+                  <div class="bg-red-100/40 dark:bg-red-100/5 p-4 rounded-lg">
+                    <h3
+                      class="font-semibold text-sm text-gray-900 dark:text-white"
+                    >
+                      ui/ux design UY Dashboard Product
+                    </h3>
+                    <div
+                      class="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1 gap-2"
+                    >
+                      <img
+                        src="https://i.pravatar.cc/24?u=2"
+                        alt="avatar"
+                        class="w-5 h-5 rounded-full"
+                      />
+                      Abul Hasan
+                      <i data-lucide="calendar-days" class="w-4 h-4 ml-2"></i>
+                      Deadline: 12/5/2025
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="../assets/js/script.js"></script>
+  </body>
+</html>
