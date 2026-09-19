@@ -1,0 +1,4 @@
+@import url('./leads.css');
+.chart-wrap { height: 285px; position: relative; }
+.period-button.active { background: #001846; color: white; }
+.dark .period-button.active { background: #9a4cca; }
