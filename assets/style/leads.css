@@ -1,0 +1,25 @@
+body { min-height: 100vh; }
+.primary-text { color: #001846; }
+.dark .primary-text { color: #e0e7ff; }
+.custom-sidebar { background: #fff; color: #1f2937; }
+.dark .custom-sidebar { background: #111827; color: #e5e7eb; }
+.text-muted { color: #6b7280; }
+.dark .text-muted { color: #9ca3af; }
+.hover-primary:hover, .sidebar-active { background: #9a4cca; color: #fff !important; }
+.pipeline-scroll { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+.kanban-column { min-width: 290px; width: 290px; }
+.deal-card { cursor: grab; transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease; }
+.deal-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(15, 23, 42, .08); }
+.deal-card:active { cursor: grabbing; }
+.deal-card.dragging { opacity: .45; transform: rotate(1.5deg); }
+.drop-zone.drag-over { background: rgba(154, 76, 202, .08); outline: 2px dashed #9a4cca; outline-offset: -5px; }
+.view-button.active { background: #001846; color: #fff; }
+.dark .view-button.active { background: #9a4cca; }
+.filter-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .65rem center; }
+.modal-backdrop { backdrop-filter: blur(2px); }
+.toast { animation: toast-in .25s ease-out; }
+@keyframes toast-in { from { transform: translateY(10px); opacity: 0; } }
+@media (max-width: 767px) {
+  #mobileSidebar { position: fixed; top: 0; left: 0; height: 100vh; }
+  .app-shell { margin: 1rem; }
+}

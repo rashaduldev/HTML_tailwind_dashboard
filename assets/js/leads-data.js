@@ -1,0 +1,31 @@
+window.CRM_PIPELINE_DATA = {
+  stages: [
+    { id: "prospect", label: "Prospect", color: "#64748B" },
+    { id: "qualified", label: "Qualified", color: "#3B82F6" },
+    { id: "proposal", label: "Proposal Sent", color: "#F59E0B" },
+    { id: "negotiation", label: "Negotiation", color: "#8B5CF6" },
+    { id: "closed", label: "Closed Won", color: "#10B981" },
+  ],
+  owners: [
+    { id: "olivia", name: "Olivia Martin", initials: "OM", color: "#DB2777" },
+    { id: "marcus", name: "Marcus Chen", initials: "MC", color: "#2563EB" },
+    { id: "priya", name: "Priya Shah", initials: "PS", color: "#7C3AED" },
+    { id: "daniel", name: "Daniel Kim", initials: "DK", color: "#059669" },
+  ],
+  deals: [
+    { id: 101, company: "Northstar Logistics", contact: "Emma Rodriguez", email: "emma@northstarlogistics.com", title: "Fleet analytics rollout", value: 48000, stage: "prospect", owner: "olivia", probability: 20, source: "Website", due: "2026-09-24", activity: "Replied 35 min ago", tags: ["Enterprise", "Inbound"] },
+    { id: 102, company: "Veridian Health", contact: "Dr. Noah Williams", email: "noah@veridianhealth.com", title: "Patient engagement CRM", value: 72500, stage: "prospect", owner: "priya", probability: 15, source: "Conference", due: "2026-09-29", activity: "Call scheduled tomorrow", tags: ["Healthcare"] },
+    { id: 103, company: "Brightline Studios", contact: "Sophie Turner", email: "sophie@brightlinestudios.co", title: "Agency operations suite", value: 18500, stage: "prospect", owner: "marcus", probability: 25, source: "Referral", due: "2026-10-03", activity: "Opened email 2h ago", tags: ["SMB"] },
+    { id: 104, company: "Apex Financial Group", contact: "James Miller", email: "j.miller@apexfinancial.com", title: "Compliance workflow", value: 95000, stage: "qualified", owner: "daniel", probability: 45, source: "Partner", due: "2026-09-27", activity: "Discovery completed", tags: ["Enterprise", "Fintech"] },
+    { id: 105, company: "Solace Energy", contact: "Maya Patel", email: "maya@solaceenergy.io", title: "Regional sales automation", value: 64000, stage: "qualified", owner: "olivia", probability: 50, source: "LinkedIn", due: "2026-10-01", activity: "Meeting 3h ago", tags: ["Mid-market"] },
+    { id: 106, company: "Harbor & Pine", contact: "Liam Walker", email: "liam@harborandpine.com", title: "Commerce customer hub", value: 31000, stage: "qualified", owner: "marcus", probability: 40, source: "Website", due: "2026-10-08", activity: "Notes added yesterday", tags: ["Retail"] },
+    { id: 107, company: "Cobalt Security", contact: "Ava Thompson", email: "ava@cobaltsecurity.com", title: "Channel partner portal", value: 124000, stage: "proposal", owner: "priya", probability: 65, source: "Outbound", due: "2026-09-23", activity: "Proposal viewed 18 min ago", tags: ["Enterprise", "Priority"] },
+    { id: 108, company: "Meridian Foods", contact: "Ethan Brooks", email: "ethan@meridianfoods.com", title: "Distributor CRM migration", value: 57000, stage: "proposal", owner: "daniel", probability: 60, source: "Referral", due: "2026-09-30", activity: "Follow-up due today", tags: ["Manufacturing"] },
+    { id: 109, company: "Lumina Education", contact: "Grace Lee", email: "grace@lumina.edu", title: "Admissions lifecycle platform", value: 44000, stage: "proposal", owner: "olivia", probability: 70, source: "Webinar", due: "2026-10-02", activity: "Legal review started", tags: ["Education"] },
+    { id: 110, company: "Atlas Construction", contact: "Benjamin Scott", email: "ben@atlasbuild.com", title: "Multi-site account system", value: 88000, stage: "negotiation", owner: "marcus", probability: 80, source: "Partner", due: "2026-09-22", activity: "Pricing call in 1h", tags: ["Enterprise", "Priority"] },
+    { id: 111, company: "Nexa Robotics", contact: "Isabella Morgan", email: "isabella@nexarobotics.ai", title: "Global revenue operations", value: 156000, stage: "negotiation", owner: "priya", probability: 85, source: "Outbound", due: "2026-09-26", activity: "Contract updated today", tags: ["Enterprise"] },
+    { id: 112, company: "Oakwell Property", contact: "Lucas Reed", email: "lucas@oakwellproperty.com", title: "Broker relationship CRM", value: 39500, stage: "closed", owner: "daniel", probability: 100, source: "Referral", due: "2026-09-18", activity: "Closed yesterday", tags: ["Real estate"] },
+    { id: 113, company: "Evergreen Mobility", contact: "Amelia Clark", email: "amelia@evergreenmobility.com", title: "Dealer network expansion", value: 81000, stage: "closed", owner: "olivia", probability: 100, source: "Conference", due: "2026-09-16", activity: "Handoff completed", tags: ["Automotive"] },
+    { id: 114, company: "Summit Legal Partners", contact: "Henry Adams", email: "henry@summitlegal.com", title: "Client intake modernization", value: 27500, stage: "prospect", owner: "daniel", probability: 10, source: "Website", due: "2026-10-11", activity: "New lead 4h ago", tags: ["Legal"] },
+  ],
+};
