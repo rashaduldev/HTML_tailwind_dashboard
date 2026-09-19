@@ -1,0 +1,12 @@
+@import url('./leads.css');
+.status-badge { border: 1px solid transparent; }
+.status-customer { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
+.status-prospect { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
+.status-qualified { color: #b45309; background: #fffbeb; border-color: #fde68a; }
+.status-negotiation { color: #6d28d9; background: #f5f3ff; border-color: #ddd6fe; }
+.dark .status-customer { color: #6ee7b7; background: rgba(16,185,129,.12); border-color: rgba(52,211,153,.25); }
+.dark .status-prospect { color: #93c5fd; background: rgba(59,130,246,.12); border-color: rgba(96,165,250,.25); }
+.dark .status-qualified { color: #fcd34d; background: rgba(245,158,11,.12); border-color: rgba(251,191,36,.25); }
+.dark .status-negotiation { color: #c4b5fd; background: rgba(139,92,246,.12); border-color: rgba(167,139,250,.25); }
+.drawer { transition: transform .25s ease; }
+.drawer.open { transform: translateX(0); }
