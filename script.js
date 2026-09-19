@@ -16,6 +16,19 @@ function toggleSubmenu(el) {
   }
 }
 
+function toggleSection(el, submenuId) {
+  const submenu = document.getElementById(submenuId);
+  if (!submenu) return;
+  const isHidden = submenu.classList.contains("hidden");
+  document.querySelectorAll(".sidebar-submenu").forEach((menu) => {
+    if (menu !== submenu) menu.classList.add("hidden");
+  });
+  submenu.classList.toggle("hidden", !isHidden);
+  document.querySelectorAll(".sidebar-item").forEach((item) => item.classList.remove("active"));
+  el.classList.toggle("active", isHidden);
+  if (typeof lucide !== "undefined") lucide.createIcons();
+}
+
 function setActive(el) {
   document
     .querySelectorAll(".sidebar-item")
