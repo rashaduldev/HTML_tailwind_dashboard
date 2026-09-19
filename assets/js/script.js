@@ -18,6 +18,26 @@ function toggleSubmenu(el) {
   }
 }
 
+// Generic accordion handler for every arrow-based sidebar section.
+function toggleSection(el, submenuId) {
+  const submenu = document.getElementById(submenuId);
+  if (!submenu) return;
+  const willOpen = submenu.classList.contains("hidden");
+
+  document.querySelectorAll(".sidebar-submenu").forEach((menu) => {
+    if (menu !== submenu) menu.classList.add("hidden");
+  });
+  document.querySelectorAll(".sidebar-item").forEach((item) => {
+    if (item !== el) item.classList.remove("active");
+  });
+
+  submenu.classList.toggle("hidden", !willOpen);
+  el.classList.toggle("active", willOpen);
+  const chevron = el.querySelector(".section-chevron");
+  if (chevron) chevron.classList.toggle("rotate-180", willOpen);
+  if (typeof lucide !== "undefined") lucide.createIcons();
+}
+
 // Set active state for sidebar items
 function setActive(el) {
   document
